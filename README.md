@@ -1,0 +1,2 @@
+# Newton-sMethod
+Finding root

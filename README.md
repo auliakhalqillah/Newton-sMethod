@@ -3,10 +3,10 @@ A Newton’s method is the  fastest method for finding root. This method works b
 
 ![newton equation](https://i.upmath.me/svg/x_%7Bn%2B1%7D%20%3D%20x_n%20-%20%7Bf(x)%5Cover%20f'(x)%7D)
 
-where the `n` is maximum iteration, starting from `i = 1, n` of Newton's Method process, and the f'(x) is the first derivative of f(x). By using this method, the root estimation can be convergence or not convergence. If the root estimation is convergence that means it is close to the expected root of f(x). Otherwise, if the root estimation is not convergence that means it is far to the expected root of f(x), so you have to input another initial root estimation again.
+By using this method, the root estimation can be convergence or not convergence. If the root estimation is convergence that means it is close to the expected root of f(x). Otherwise, if the root estimation is not convergence that means it is far to the expected root of f(x), so you have to input another initial root estimation again.
 
 # Example
-Given a function of f(x) = x2-2x+1. By using Newton’s Method, set the maximum iteration (maxiter) equal to 100, and set initial root estimation (x) equal to 3. After 100 times iteration, the final root is 1.00024414 (precision in Fortran) by using Newton’s Method, where the f(x) is 0 and convergence to expected root of 1.
+Given a function of f(x) = x2-2x+1. By using Newton’s Method, set initial root estimation (x) equal to 3. We then get the final root is 1.00024414 (precision in Fortran) by using Newton’s Method, where the f(x) is 0 and convergence to expected root of 1.
 ```
            Iter	    x             f(x)     	   Info                                                                                     
            1   2.00000000       1.00000000     Not Convergence                                                                                     

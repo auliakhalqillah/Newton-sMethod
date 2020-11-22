@@ -12,7 +12,7 @@ implicit none
 
 integer :: iter
 real :: limiterror = 1.0e-6
-real :: x,f,df,error,xr,xold
+real :: x,f,df,error,xr,xrold
 real :: start, finish
 character(len=100) :: fmt, info
 
@@ -35,26 +35,34 @@ open(unit=1, file='newtonraphson.txt', status='replace')
      iter = 1
      ! Calculate initial root estimation
      xr = x - (f(x)/df(x))
-     xold = x
+     xrold = x
      x = xr
-     error = abs((xr - xold)/xold)
-     ! Calculate the next root estimation when error > limit of error
-     do while (error > limiterror)
-          xr = x - (f(x)/df(x))
-          xold = x
-          x = xr
-          error = abs((xr - xold)/xold)
-          ! Write the result on terminal display and save it to file
+     error = abs((xr - xrold)/xrold)
+     if ((error < limiterror) .or. isnan(xr)) then
+          x = xrold
+          info = 'Convergence'
+          error = 0
           write (*,*) iter, x, f(x), info, error
           write (1,*) iter, x, f(x), info, error
-          if (abs(f(x)) < limiterror) then
-               info = "Convergence"
-          else
-               info = "Not Convergence"
-          end if
-          ! update to next iteration
-          iter = iter + 1
-     end do
+     else 
+          ! Calculate the next root estimation when error > limit of error
+          do while (error > limiterror)
+               xr = x - (f(x)/df(x))
+               xrold = x
+               x = xr
+               error = abs((xr - xrold)/xrold)
+               ! Write the result on terminal display and save it to file
+               write (*,*) iter, x, f(x), info, error
+               write (1,*) iter, x, f(x), info, error
+               if (abs(f(x)) < limiterror) then
+                    info = "Convergence"
+               else
+                    info = "Not Convergence"
+               end if
+               ! update to next iteration
+               iter = iter + 1
+          end do
+     end if
 close(1)
 call cpu_time(finish)
 print '("Time = ",f6.5," seconds.")',finish-start

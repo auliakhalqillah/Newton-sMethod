@@ -11,15 +11,17 @@ program newton
 implicit none
 
 integer :: iter
-integer :: maxiter
-real :: error = 1.0e-6
-real :: x,f,df
+real :: limiterror = 1.0e-6
+real :: x,f,df,error,xr,xold
+real :: start, finish
 character(len=100) :: fmt, info
 
 
-
-write (*,"(a)",advance='no') "Masukan maksimal pengulangan:"
-read *, maxiter
+write(*,*)""
+write(*,*)"---------------------------------"
+write(*,*)"NEWTON'S METHOD - FINDING ROOT"
+write(*,*)"---------------------------------"
+write(*,*) ""
 
 write (*,"(a)",advance='no') "Masukan tebakan awal:"
 read *, x
@@ -27,22 +29,35 @@ read *, x
 fmt = "(a12,a13,a13,a13)"
 write (*,*) ""
 write(*,fmt)"ITER","X[ROOT]","F(X)","INFO"
+call cpu_time(start)
+! start process
 open(unit=1, file='newtonraphson.txt', status='replace')
      iter = 1
-     do while (iter <= maxiter)
-          x = x - (f(x)/df(x))
-          
-          if (abs(f(x)) <= error) then
+     ! Calculate initial root estimation
+     xr = x - (f(x)/df(x))
+     xold = x
+     x = xr
+     error = abs((xr - xold)/xold)
+     ! Calculate the next root estimation when error > limit of error
+     do while (error > limiterror)
+          xr = x - (f(x)/df(x))
+          xold = x
+          x = xr
+          error = abs((xr - xold)/xold)
+          ! Write the result on terminal display and save it to file
+          write (*,*) iter, x, f(x), info, error
+          write (1,*) iter, x, f(x), info, error
+          if (abs(f(x)) < limiterror) then
                info = "Convergence"
           else
                info = "Not Convergence"
           end if
-
-          write (*,*) iter, x, f(x), info
-          write (1,*) iter, x, f(x), info
+          ! update to next iteration
           iter = iter + 1
      end do
 close(1)
+call cpu_time(finish)
+print '("Time = ",f6.5," seconds.")',finish-start
 end program 
 
 function f(x)

@@ -52,16 +52,20 @@ open(unit=1, file='newtonraphson.txt', status='replace')
                xrold = x
                x = xr
                error = abs((xr - xrold)/xr) * 100
-               ! Write the result on terminal display and save it to file
-               write (*,*) iter, x, f(x), info, error
-               write (1,*) iter, x, f(x), info, error
                if (abs(f(x)) < limiterror) then
                     info = 1
                else
                     info = 0
                end if
-               ! update to next iteration
-               iter = iter + 1
+               ! Write the result on terminal display and save it to file
+               if (isnan(error)) then
+                    exit
+               else
+                    write (*,*) iter, x, f(x), info, error
+                    write (1,*) iter, x, f(x), info, error
+                    ! update to next iteration
+                    iter = iter + 1
+               end if
           end do
      end if
 close(1)

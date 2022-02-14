@@ -51,7 +51,13 @@ open(unit=1, file='newtonraphson.txt', status='replace')
                xr = x - (f(x)/df(x))
                xrold = x
                x = xr
-               error = abs((xr - xrold)/xr) * 100
+
+               if (xr == 0) then
+                    error = 100
+               else                     
+                    error = abs((xr - xrold)/xr) * 100
+               end if 
+               
                if (abs(f(x)) < limiterror) then
                     info = 1
                else
